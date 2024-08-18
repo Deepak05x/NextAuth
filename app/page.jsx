@@ -1,7 +1,11 @@
-import React from "react";
+import LoginForm from "@/components/LoginForm";
 
 const Home = () => {
-    return <div>Home</div>;
+    return (
+        <div className="flex min-h-screen items-center justify-center">
+            <LoginForm />
+        </div>
+    );
 };
 
 export default Home;

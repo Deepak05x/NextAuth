@@ -1,40 +1,22 @@
-import NextAuth, { CredentialsSignin } from "next-auth"
-import Credentials from "next-auth/providers/credentials"
-import { User } from "./models/User"
-import connectDB from "./lib/db"
- 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [
-    Credentials({
-      name: 'Credentails',
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google"
+import GitHubProvider from "next-auth/providers/github"
 
-      credentials:{
-        email: {label: "Email", type: "email"},
-        password: {label: "Password", type: "passwrod" },
-      },
 
-      authorize: async(credentials)=>{
-        const email = credentials.email
-        const password = credentials.password
+export const {handlers: {GET, POST}, signIn, signOut, auth} = 
+NextAuth({
+    providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 
-      if(!email || !password){
-        throw new CredentialsSignin("Please provide email and password")
-
-      }
-
-      await connectDB()
-
-      const user  = await User.findOne({email}).select("password +role")
-
-      if(!user){
-        throw new Error("Invalid Password or Email")
-      }
-
-      if(!user.password){
-        throw new Error
-      }
-
-      }
-    })
-  ],
+            authorization: {
+                params:{
+                    prompt:"consent",
+                    access_type: "offline",
+                    response_type: "code"
+                }
+            }
+        })
+    ]
 })
