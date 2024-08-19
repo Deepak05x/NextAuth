@@ -8,7 +8,19 @@ export async function doLogin(formData){
     await signIn(action, {redirectTo : "/home"})   
 }
 
+export async function doLogOut(formData){
+    await signOut({redirectTo: "/"})
+}
 
-export async function doLogout(formData){
-    
+export async function doCredentialLogin(formData){
+    try{
+        const response = await signIn("credentials", {
+            email: formData.get('email'),
+            password: formData.get('password'),
+            redirect: false
+        })
+        return response
+    }catch(error){
+        throw new Error(error)
+    }
 }

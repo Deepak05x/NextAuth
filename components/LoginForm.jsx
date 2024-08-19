@@ -1,16 +1,41 @@
+"use client";
+
 import React from "react";
-import { doLogin } from "@/app/actions";
+import SocialLogin from "./SocialLogin";
+import { doCredentialLogin } from "@/app/actions";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+    const router = useRouter();
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.currentTarget);
+
+        const response = await doCredentialLogin(formData);
+
+        if (!!response.error) {
+        } else {
+            router.push("/home");
+        }
+    };
+
     return (
-        <form className="flex gap-12" action={doLogin}>
-            <button type="submit" name="action" value="google" className="bg-black text-white px-12 py-8 text-lg rounded-lg">
-                Sign In With Google
-            </button>
-            <button type="submit" name="action" value="github" className="bg-black text-white px-12 py-8 text-lg rounded-lg">
-                Sign In With Github
-            </button>
-        </form>
+        <div className="flex flex-col gap-12">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-12 items-center">
+                <div>
+                    <label htmlFor="">Enter your email</label>
+                    <input type="email" name="email" id="email" className="border-black border py-4 px-12" />
+                </div>
+                <div>
+                    <label htmlFor="">Enter your password</label>
+                    <input type="password" name="password" id="password" className="border-black border py-4 px-12" />
+                </div>
+                <button className="bg-black px-12 py-8 text-white">Login</button>
+            </form>
+            <SocialLogin />
+        </div>
     );
 };
 
