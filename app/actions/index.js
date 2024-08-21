@@ -8,7 +8,7 @@ export async function doLogin(formData){
     await signIn(action, {redirectTo : "/home"})   
 }
 
-export async function doLogOut(formData){
+export async function doLogOut(){
     await signOut({redirectTo: "/"})
 }
 
